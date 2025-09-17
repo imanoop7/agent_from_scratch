@@ -1,0 +1,5 @@
+ollama==0.3.3
+requests>=2.31.0
+beautifulsoup4>=4.12.3
+python-dotenv>=1.0.1
+markdownify>=0.13.1
