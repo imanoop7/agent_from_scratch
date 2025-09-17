@@ -1,7 +1,6 @@
 """Demonstrates tool-use: model calls search tool, then we judge the answer."""
 
 from ai import complete_with_tools, openai
-from search_google import search_google_tool_config
 
 prompt = (
 	"I want to buy a hoodie with a fur lined hood. It needs a full zipper. "
