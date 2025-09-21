@@ -1,6 +1,7 @@
-"""Demonstrates tool-use: model calls search tool, then we judge the answer."""
+"""Demonstrates tool-use: model calls browse web tool, then we judge the answer."""
 
 from ai import complete_with_tools, openai
+from browse_web import browse_web_tool_config
 
 prompt = (
 	"I want to buy a hoodie with a fur lined hood. It needs a full zipper. "
@@ -14,7 +15,7 @@ def main():
 		"messages": [{"role": "developer", "content": prompt}],
 		"model": "llama3.2:latest",
 		"tool_choice": "auto",
-		"tools": [search_google_tool_config],
+		"tools": [browse_web_tool_config],
 	})
 	answer = completion.get("choices", [{}])[0].get("message", {}).get("content")
 	print("\n\n" + "#" * 40)
@@ -26,7 +27,7 @@ def main():
 		"messages": [{
 			"role": "developer",
 			"content": (
-				"You are a strict critic. Given the following question, determine if the answer a full anwser to the question.\n\n"
+				"You are a strict critic. Given the following question, determine if the answer a full answer to the question.\n\n"
 				f"Question: {prompt}\n\nAnswer: {answer}"
 			),
 		}],

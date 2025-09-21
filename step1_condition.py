@@ -24,7 +24,7 @@ def main():
 		"messages": [{
 			"role": "developer",
 			"content": (
-				"You are a strict critic. Given the following question, determine if the answer a full anwser to the question.\n\n"
+				"You are a strict critic. Given the following question, determine if the answer a full answer to the question.\n\n"
 				f"Question: {prompt}\n\nAnswer: {answer}"
 			),
 		}],
