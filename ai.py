@@ -32,13 +32,25 @@ def _post_chat_completions(payload: Dict[str, Any]) -> Dict[str, Any]:
 		"Content-Type": "application/json",
 		"Authorization": f"Bearer {os.getenv('OLLAMA_API_KEY', 'ollama')}"
 	}
-	resp = requests.post(url, headers=headers, json=payload, timeout=300)
-	if resp.status_code == 400 and ("tools" in payload or "tool_choice" in payload):
-		# Retry without tools
-		fallback = {k: v for k, v in payload.items() if k not in ("tools", "tool_choice")}
-		resp = requests.post(url, headers=headers, json=fallback, timeout=300)
-	resp.raise_for_status()
-	return resp.json()
+	
+	try:
+		resp = requests.post(url, headers=headers, json=payload, timeout=300)
+		if resp.status_code == 400 and ("tools" in payload or "tool_choice" in payload):
+			# Retry without tools
+			fallback = {k: v for k, v in payload.items() if k not in ("tools", "tool_choice")}
+			resp = requests.post(url, headers=headers, json=fallback, timeout=300)
+		resp.raise_for_status()
+		return resp.json()
+	except requests.exceptions.ConnectionError:
+		raise ConnectionError(
+			f"Could not connect to Ollama server at {url}. "
+			"Please ensure Ollama is running locally on port 11434. "
+			"Install it from https://ollama.com/download and run 'ollama serve'"
+		)
+	except requests.exceptions.Timeout:
+		raise TimeoutError(f"Request to Ollama server timed out after 300 seconds")
+	except Exception as e:
+		raise RuntimeError(f"Unexpected error communicating with Ollama: {e}")
 
 
 class OllamaClient:
